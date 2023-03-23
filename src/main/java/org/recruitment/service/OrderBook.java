@@ -21,7 +21,7 @@ public class OrderBook {
         Double2ObjectRBTreeMap<List<Order>> levels = getInnerOrders(order.getSide());
 
         List<Order> orders = levels.get(order.getPrice());
-        if(orders != null) {
+        if (orders != null) {
             orders.add(order);
         } else {
             orders = new LinkedList<>();
@@ -38,7 +38,7 @@ public class OrderBook {
             Double2ObjectRBTreeMap<List<Order>> levels = getInnerOrders(removedOrder.getSide());
             List<Order> orders = levels.get(removedOrder.getPrice());
             orders.remove(removedOrder);
-            if(orders.isEmpty()) {
+            if (orders.isEmpty()) {
                 levels.remove(removedOrder.getPrice());
             }
         }
@@ -67,6 +67,10 @@ public class OrderBook {
     public double getPriceForLevel(char side, int level) {
         if (level <= 0) {
             throw new IllegalArgumentException("Level should be number bigger then 0");
+        }
+        if (level == 1) {
+            Double2ObjectRBTreeMap<List<Order>> innerOrders = getInnerOrders(side);
+            return innerOrders.firstDoubleKey();
         }
 
         List<Order> orders = getOrders(side);
